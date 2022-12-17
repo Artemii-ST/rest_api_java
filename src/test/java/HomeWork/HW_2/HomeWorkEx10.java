@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class HomeWorkEx10 {
     String HEADER_RESPONSE_VARIABLE = "Date";
     @Test
-    public void testFor200() {
+    public void testLengthHeaderVariable() {
         //BasicConfigurator.configure();
         Response response = RestAssured
                 .get("https://playground.learnqa.ru/api/map")
