@@ -1,4 +1,4 @@
-package HomeWork;
+package HomeWork.HW_1;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
