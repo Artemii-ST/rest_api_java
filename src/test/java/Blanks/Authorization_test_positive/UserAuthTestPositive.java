@@ -1,4 +1,4 @@
-package Authorization_test_positive;
+package Blanks.Authorization_test_positive;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;

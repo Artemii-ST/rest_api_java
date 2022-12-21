@@ -1,4 +1,4 @@
-package Authorization_test_negative;
+package Blanks.Authorization_test_negative;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
@@ -6,7 +6,6 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.log4j.BasicConfigurator;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 

@@ -1,4 +1,4 @@
-package UserRegisterTest;
+package Blanks.UserRegisterTest;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;

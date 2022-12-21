@@ -1,8 +1,7 @@
-package TestsCodeResponse;
+package Blanks.TestsCodeResponse;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.apache.log4j.BasicConfigurator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
