@@ -14,16 +14,13 @@ public class UserRegisterTest extends BaseTestCase {
     @Test
     public void testCreateUserWithExistingEmail() {
         String email = "vinkotov@example.com";
-        Map<String, String> date = new HashMap<>();
-        date.put("email",email);
-        date.put("password", "123");
-        date.put("username","Loni_kot");
-        date.put("firstName", "Loni");
-        date.put("lastName", "Kotov");
+        Map<String, String> userData = new HashMap<>();
+        userData.put("email",email);
+        userData = DataGenerator.getRegistrationData(userData);
 
         Response responseCreateAuth = RestAssured
                 .given()
-                .body(date)
+                .body(userData)
                 .post("https://playground.learnqa.ru/api/user/")
                 .andReturn();
         Assertions.assertResponseTextEquals(responseCreateAuth, "Users with email '" +email+ "' already exists");
@@ -33,12 +30,7 @@ public class UserRegisterTest extends BaseTestCase {
     @Test
     public void testCreateUserSuccessfully() {
         String email = DataGenerator.getRandomEmail();
-        Map<String, String> date = new HashMap<>();
-        date.put("email",email);
-        date.put("password", "123");
-        date.put("username","Loni_kot");
-        date.put("firstName", "Loni");
-        date.put("lastName", "Kotov");
+        Map<String, String> date = DataGenerator.getRegistrationData();
 
         Response responseCreateAuth = RestAssured
                 .given()
