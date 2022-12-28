@@ -10,6 +10,36 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 
 public class ApiCoreRequests {
+    @Step("Creating a user with the desired firstName")
+    public Response registrationUserWithNeededFirstName(String url, String firstName) {
+        Map<String, String> userData = DataGenerator.getRegistrationData();
+        userData.put(VariablesRequests.FIRSTNAME,firstName);
+        return given()
+                .body(userData)
+                .post(url)
+                .andReturn();
+    }
+
+    @Step("Creating a random user without a required field")
+    public Response registrationRandomUserWithOutNeededField(String url, String unnecessary_field) {
+        Map<String, String> userData = DataGenerator.getRegistrationData();
+        userData.remove(unnecessary_field);
+        return given()
+                .body(userData)
+                .post(url)
+                .andReturn();
+    }
+
+    @Step("Creating a user with the desired e-mail")
+    public Response registrationUserWithNeededEmail(String url, String email) {
+        Map<String, String> userData = DataGenerator.getRegistrationData();
+        userData.put("email",email);
+        return given()
+                .body(userData)
+                .post(url)
+                .andReturn();
+    }
+
     @Step("Make a GET-request with token and auth cookie")
     public Response makeGetRequest(String url, String token, String cookies) {
         return given()

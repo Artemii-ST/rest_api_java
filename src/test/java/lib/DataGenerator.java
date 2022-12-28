@@ -1,10 +1,17 @@
 package lib;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DataGenerator {
+    public static String getRandomString(int countCharacter) {
+        String random = RandomStringUtils.randomAlphabetic(countCharacter);
+        return random;
+    }
+
     public static String getRandomEmail() {
         String random = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
         return "email" + random + "@example.com";
