@@ -1,6 +1,10 @@
 package lib;
 
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
+
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.not;
@@ -28,6 +32,10 @@ public class Assertions {
         );
     }
 
+    public static boolean assertResponseTextEqualsBoolean(Response response, String expectedText) {
+        return response.asString().equals(expectedText);
+    }
+
     public static void assertResponseStatusCodeEquals(Response response, int expectedStatusCode) {
         assertEquals(
                 expectedStatusCode,
@@ -46,7 +54,22 @@ public class Assertions {
 
     public static void assertResponseHasFields(Response response, String[] expectedFieldsName) {
         for (String fieldsName : expectedFieldsName) {
-            response.then().assertThat().body("$",hasKey(fieldsName));
+            response.then().assertThat().body("$", hasKey(fieldsName));
         }
+    }
+
+    public static void assertResponseNotHasFields(Response response, String[] notExpectedFieldsName) {
+        for (String fieldsName : notExpectedFieldsName) {
+            response.then().assertThat().body("$", not(hasKey(fieldsName)));
+        }
+    }
+
+
+    public static void assertResponseHasField(Response response, String expectedFieldName) {
+        response.then().assertThat().body("$", hasKey(expectedFieldName));
+    }
+
+    public static boolean assertResponseHasFieldBoolean(Response response, String expectedFieldName) {
+        return response.asString().contains(expectedFieldName);
     }
 }

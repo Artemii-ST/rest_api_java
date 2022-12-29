@@ -3,15 +3,50 @@ package tests;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-import lib.Assertions;
-import lib.BaseTestCase;
+import lib.*;
 import org.apache.log4j.BasicConfigurator;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class UserGetTest extends BaseTestCase {
+    ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+
+    @Test
+    public void testGetUserDetailsAuthAsOtherUser() {
+        BasicConfigurator.configure();
+        //Create User
+        Map<String, String> userData = DataGenerator.getRegistrationData();
+        Response responseRegUser = apiCoreRequests.makePostRequest(
+                "https://playground.learnqa.ru/api/user/",
+                userData
+        );
+        //Login user
+        Response responseLoginUser = apiCoreRequests.makePostRequest(
+                "https://playground.learnqa.ru/api/user/login",
+                new GetData().getEmailAndPasswordFromMapData(userData)
+        );
+        //Check user data
+        Response responseUserData = apiCoreRequests.creatingRequestWithParam(
+                "https://playground.learnqa.ru/api/user/%s",
+                responseLoginUser
+        );
+        assertTrue(Assertions.assertResponseTextEqualsBoolean(responseUserData, "User not found")
+                        || Assertions.assertResponseHasFieldBoolean(responseUserData, VariablesRequests.USERNAME),
+                "request received erroneous data ==> " + responseUserData.asString());
+        String[] notExpectedFields = new String[]{
+                VariablesRequests.FIRSTNAME,
+                VariablesRequests.LASTNAME,
+                VariablesRequests.EMAIL
+        };
+        Assertions.assertResponseNotHasFields(responseUserData, notExpectedFields);
+
+    }
+
     @Test
     public void testGetUserDataNotAuth() {
         BasicConfigurator.configure();
@@ -51,7 +86,7 @@ public class UserGetTest extends BaseTestCase {
         String[] authFields = new String[]{
                 "username", "email", "firstName", "lastName"
         };
-        Assertions.assertResponseHasFields(responseUserData,authFields);
+        Assertions.assertResponseHasFields(responseUserData, authFields);
     }
 }
 

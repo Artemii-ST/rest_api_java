@@ -10,10 +10,28 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 
 public class ApiCoreRequests {
+    @Step("Creating a request with header, cookies and userID")
+    public Response creatingRequestWithParam(String url, Response response) {
+        return given()
+                .headers(VariablesRequests.TOKEN
+                        , new GetData().getHeaderCookieUserIDFromResponse(response).get(
+                                VariablesRequests.TOKEN
+                        ))
+                .cookies(VariablesRequests.COOKIES
+                        , new GetData().getHeaderCookieUserIDFromResponse(response).get(
+                                VariablesRequests.COOKIES
+                        ))
+                .get(String.format(url, (int) (Math.random()
+                        * (Integer.parseInt(new GetData().getHeaderCookieUserIDFromResponse(response).get(
+                                VariablesRequests.USER_ID
+                )) * 2))))
+                .andReturn();
+    }
+
     @Step("Creating a user with the desired firstName")
     public Response registrationUserWithNeededFirstName(String url, String firstName) {
         Map<String, String> userData = DataGenerator.getRegistrationData();
-        userData.put(VariablesRequests.FIRSTNAME,firstName);
+        userData.put(VariablesRequests.FIRSTNAME, firstName);
         return given()
                 .body(userData)
                 .post(url)
@@ -33,7 +51,7 @@ public class ApiCoreRequests {
     @Step("Creating a user with the desired e-mail")
     public Response registrationUserWithNeededEmail(String url, String email) {
         Map<String, String> userData = DataGenerator.getRegistrationData();
-        userData.put("email",email);
+        userData.put("email", email);
         return given()
                 .body(userData)
                 .post(url)

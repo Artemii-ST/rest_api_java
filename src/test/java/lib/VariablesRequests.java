@@ -8,4 +8,5 @@ public class VariablesRequests {
     final public static String USERNAME = "username";
     final public static String FIRSTNAME = "firstName";
     final public static String LASTNAME = "lastName";
+    final public static String USER_ID = "user_id";
 }
