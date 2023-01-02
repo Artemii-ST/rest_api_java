@@ -2,14 +2,16 @@ package lib;
 
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.RestAssured;
 import io.restassured.http.Header;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
-public class ApiCoreRequests {
+public class ApiCoreRequests extends BaseTestCase {
     @Step("Creating a request with header, cookies and userID")
     public Response creatingRequestWithParam(String url, Response response) {
         return given()
@@ -92,6 +94,74 @@ public class ApiCoreRequests {
                 .filter(new AllureRestAssured())
                 .body(authData)
                 .post(url)
+                .andReturn();
+    }
+
+    @Step("Make a POST-request for registration user")
+    public JsonPath makeUserCreatePostRequest(String url, Map<String, String> generatedUserData) {
+        return given()
+                .body(generatedUserData)
+                .post(url)
+                .jsonPath();
+    }
+
+    @Step("Make a POST-request for edit user")
+    public Response makePostRequestForEditUser(
+            String url,
+            Response responseForGetHeaderAndCookies,
+            Map<String, String> editedUserData,
+            String userID) {
+        return RestAssured.given()
+                .header(VariablesRequests.TOKEN, this.getHeader(responseForGetHeaderAndCookies, VariablesRequests.TOKEN))
+                .cookies(VariablesRequests.COOKIES, getCookie(responseForGetHeaderAndCookies, VariablesRequests.COOKIES))
+                .body(editedUserData)
+                .put(url + userID)
+                .andReturn();
+    }
+
+    @Step("Make a POST-request for edit user - with integer userID")
+    public Response makePostRequestForEditUser(
+            String url,
+            Response responseForGetHeaderAndCookies,
+            Map<String, String> editedUserData,
+            int userID) {
+        return RestAssured.given()
+                .header(VariablesRequests.TOKEN, this.getHeader(responseForGetHeaderAndCookies, VariablesRequests.TOKEN))
+                .cookies(VariablesRequests.COOKIES, getCookie(responseForGetHeaderAndCookies, VariablesRequests.COOKIES))
+                .body(editedUserData)
+                .put(url + userID)
+                .andReturn();
+    }
+
+    @Step("Make a POST-request for edit user with out auth data")
+    public Response makePostRequestForEditUserWithOutAuthData(
+            String url,
+            Map<String, String> editedUserData,
+            String userID) {
+        return RestAssured.given()
+                .body(editedUserData)
+                .put(url + userID)
+                .andReturn();
+    }
+
+
+    @Step("Make a GET-request with token, auth cookie and userID")
+    public Response makeGetRequest(String url, Response responseForGetHeaderAndCookies, String userID) {
+        return RestAssured
+                .given()
+                .header(VariablesRequests.TOKEN, getHeader(responseForGetHeaderAndCookies, VariablesRequests.TOKEN))
+                .cookies(VariablesRequests.COOKIES, getCookie(responseForGetHeaderAndCookies, VariablesRequests.COOKIES))
+                .get(url + userID)
+                .andReturn();
+    }
+
+    @Step("Make a GET-request with token, auth cookie and userID - with integer userID")
+    public Response makeGetRequest(String url, Response responseForGetHeaderAndCookies, int userID) {
+        return RestAssured
+                .given()
+                .header(VariablesRequests.TOKEN, getHeader(responseForGetHeaderAndCookies, VariablesRequests.TOKEN))
+                .cookies(VariablesRequests.COOKIES, getCookie(responseForGetHeaderAndCookies, VariablesRequests.COOKIES))
+                .get(url + userID)
                 .andReturn();
     }
 
