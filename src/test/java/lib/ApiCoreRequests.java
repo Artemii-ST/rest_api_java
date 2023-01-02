@@ -119,6 +119,18 @@ public class ApiCoreRequests extends BaseTestCase {
                 .andReturn();
     }
 
+    @Step("Make a DELETE-request for delete user")
+    public Response makeDeleteRequestForDeleteUser(
+            String url,
+            Response responseForGetHeaderAndCookies,
+            String userID) {
+        return RestAssured.given()
+                .header(VariablesRequests.TOKEN, this.getHeader(responseForGetHeaderAndCookies, VariablesRequests.TOKEN))
+                .cookies(VariablesRequests.COOKIES, getCookie(responseForGetHeaderAndCookies, VariablesRequests.COOKIES))
+                .delete(url + userID)
+                .andReturn();
+    }
+
     @Step("Make a POST-request for edit user - with integer userID")
     public Response makePostRequestForEditUser(
             String url,
