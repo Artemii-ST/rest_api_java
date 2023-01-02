@@ -1,9 +1,10 @@
 package tests;
 
-import io.qameta.allure.Description;
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -16,6 +17,7 @@ public class UserRegisterTest extends BaseTestCase {
 
     @Test
     @Description("Creating a user with a very long username - longer than 250 characters")
+    @DisplayName("Creating a user with a very long username - longer than 250 characters")
     public void testCreateUserWithLongName() {
         Response responseCreateAuth = apiCoreRequests.registrationUserWithNeededFirstName(
                 "https://playground.learnqa.ru/api/user/",
@@ -26,6 +28,7 @@ public class UserRegisterTest extends BaseTestCase {
 
     @Test
     @Description("Creating a user with a very short name of one character")
+    @DisplayName("Creating a user with a very short name of one character")
     public void testCreateUserWithShortName() {
         Response responseCreateAuth = apiCoreRequests.registrationUserWithNeededFirstName(
                 "https://playground.learnqa.ru/api/user/",
@@ -35,6 +38,7 @@ public class UserRegisterTest extends BaseTestCase {
 
     @ParameterizedTest
     @Description("Creating a user without specifying one of the fields")
+    @DisplayName("Creating a user without specifying one of the fields")
     @ValueSource(strings = {"email", "password", "username", "firstName", "lastName"})
     public void testCreateUserWithOutNeededField(String unnecessary_field) {
         Response responseCreateAuth = apiCoreRequests.registrationRandomUserWithOutNeededField(
@@ -46,6 +50,7 @@ public class UserRegisterTest extends BaseTestCase {
 
     @Test
     @Description("Checking user creation with invalid e-mail")
+    @DisplayName("Checking user creation with invalid e-mail")
     public void testCreateUserWithWrongEmail() {
         Response responseCreateAuth = apiCoreRequests.registrationUserWithNeededEmail(
                 "https://playground.learnqa.ru/api/user/",
@@ -54,6 +59,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("Creating a user with existing e-mail")
+    @DisplayName("Creating a user with existing e-mail")
     public void testCreateUserWithExistingEmail() {
         String email = "vinkotov@example.com";
         Map<String, String> userData = new HashMap<>();
@@ -70,6 +77,12 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("User creation")
+    @DisplayName("User creation")
+    @TmsLink("test-1")
+    @Issue("123")
+    @Link(name = "Ссылка", url = "http://yandex.ru")
+    @Owner(value = "Пупкин Валерий Иванович")
     public void testCreateUserSuccessfully() {
         String email = DataGenerator.getRandomEmail();
         Map<String, String> date = DataGenerator.getRegistrationData();
